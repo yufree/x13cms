@@ -214,9 +214,10 @@ getIsoLabelReport <- function(xcmsSet, sampleNames,
         }
         if (i < numPutativeLabels) {
             A = (i + 1):numPutativeLabels
-            if (any(labelsMatrix[A, 1] == labelsMatrix[i, 
+            idx = any(labelsMatrix[A, 1] == labelsMatrix[i, 
                 1] && labelsMatrix[A, 2] == labelsMatrix[i, 
-                2])) {
+                2])
+            if (idx) {
                 outtakes = c(outtakes, i)
             }
         }
