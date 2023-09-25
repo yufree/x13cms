@@ -168,7 +168,7 @@ getIsoLabelReport <- function(xcmsSet, sampleNames,
                 }
                 if (delta <= DELTA * (1 + ppm/1e+06) + 
                   (groupMzs[a] * ppm/1e+06)/(iMD * 
-                    (1 - ppm/1e+06)) && delta >= DELTA * 
+                    (1 - ppm/1e+06)) & delta >= DELTA * 
                   (1 - ppm/1e+06) - (groupMzs[a] * 
                   ppm/1e+06)/(iMD * (1 + ppm/1e+06))) {
                   if (DELTA * massOfLabeledAtom >= 
@@ -176,14 +176,14 @@ getIsoLabelReport <- function(xcmsSet, sampleNames,
                     next
                   }
                   if (mean(intensities1[b, ]) > mean(intensities1[a, 
-                    ]) && !compareOnlyDistros) {
+                    ]) & !compareOnlyDistros) {
                     next
                   }
-                  if (all(intensities1[a, ] == 0) && 
+                  if (all(intensities1[a, ] == 0) & 
                     all(intensities2[a, ] == 0)) {
                     next
                   }
-                  if (all(intensities1[b, ] == 0) && 
+                  if (all(intensities1[b, ] == 0) & 
                     all(intensities2[b, ] == 0)) {
                     next
                   }
@@ -254,7 +254,7 @@ getIsoLabelReport <- function(xcmsSet, sampleNames,
         RTs = list()
         numisotopologues = 0
         k = j
-        while (k <= numPutativeLabels && labelsMatrix[k, 
+        while (k <= numPutativeLabels & labelsMatrix[k, 
             1] == a) {
             isotopologues = c(isotopologues, groupMzs[labelsMatrix[k, 
                 2]])
@@ -317,15 +317,15 @@ getIsoLabelReport <- function(xcmsSet, sampleNames,
                   , drop = FALSE]
             }
         }
-        if (!compareOnlyDistros && monotonicityTol) {
+        if (!compareOnlyDistros & monotonicityTol) {
             meanMprevUL = mean(intensities1[a, ])
             outtakes = list()
             for (l in 1:numisotopologues) {
-                if (l == 1 && abs1[l] > (1 + monotonicityTol) * 
+                if (l == 1 & abs1[l] > (1 + monotonicityTol) * 
                   meanMprevUL) {
                   outtakes = c(outtakes, l)
-                } else if (l > 1 && abs1[l] > (1 + monotonicityTol) * 
-                  meanMprevUL && round(isotopologues[l] - 
+                } else if (l > 1 & abs1[l] > (1 + monotonicityTol) * 
+                  meanMprevUL & round(isotopologues[l] - 
                   isotopologues[l - 1]) > 1) {
                   outtakes = c(outtakes, l)
                 } else {
@@ -385,7 +385,7 @@ getIsoLabelReport <- function(xcmsSet, sampleNames,
         if (!singleSample) {
             pvalue = list()
             for (l in 1:numisotopologues) {
-                if (all(gI1[l, ] == 1) && all(gI2[l, 
+                if (all(gI1[l, ] == 1) & all(gI2[l, 
                   ] == 0) || is.infinite(enrichRatios[l])) {
                   pvalue = c(pvalue, 0)
                 } else {
@@ -399,7 +399,7 @@ getIsoLabelReport <- function(xcmsSet, sampleNames,
                   }
                 }
             }
-            if (any(unlist(pvalue) < alpha) && !any(unlist(pvalue) == 
+            if (any(unlist(pvalue) < alpha) & !any(unlist(pvalue) == 
                 1)) {
                 base = c(base, groupMzs[a])
                 mz = c(mz, list(isotopologues))
@@ -788,7 +788,7 @@ printIsoListOutputs <- function(listReport, outputfile) {
         ncols = 0
         for (j in 1:nblocks) {
             cell = listReport[[j]][[i]]
-            if (length(cell) > maxRows && class(cell) == 
+            if (length(cell) > maxRows & class(cell) == 
                 "numeric") {
                 maxRows = length(cell)
                 ncols = ncols + 1
@@ -804,14 +804,14 @@ printIsoListOutputs <- function(listReport, outputfile) {
             ncol = 1
             for (k in 1:nblocks) {
                 cell = listReport[[k]][[i]]
-                if (length(cell) == 1 && j == 1 && 
+                if (length(cell) == 1 & j == 1 & 
                   cell != -1) {
                   rowMatrix[j, ncol] = cell
                   ncol = ncol + 1
                 } else if (class(cell) == "numeric" || 
                   class(cell) == "integer" || class(cell) == 
                   "character") {
-                  if (!is.na(cell[j]) && cell[j] != 
+                  if (!is.na(cell[j]) & cell[j] != 
                     -1) {
                     rowMatrix[j, ncol] = cell[j]
                   }
@@ -982,7 +982,7 @@ plotIsoDiffReport <- function(isoDiffReport, xcmsSet,
         if (i%%12 == 1) {
             par(mfrow = c(4, 3))
         }
-        if (isoDiffReport$relInts1L[[i]][1] != -1 && 
+        if (isoDiffReport$relInts1L[[i]][1] != -1 & 
             isoDiffReport$relInts2L[[i]][1] != -1) {
             toPlot = cbind(isoDiffReport$relInts1L[[i]], 
                 isoDiffReport$relInts2L[[i]])
@@ -1130,7 +1130,7 @@ plotTotalIsoPools <- function(isoDiffReport, xcmsSet,
         if (i%%12 == 1) {
             par(mfrow = c(4, 3))
         }
-        if (isoDiffReport$absInts1L[[i]][1] != -1 && 
+        if (isoDiffReport$absInts1L[[i]][1] != -1 & 
             isoDiffReport$absInts2L[[i]][1] != -1) {
             toPlot = cbind(isoDiffReport$absInts1L[[i]], 
                 isoDiffReport$absInts2L[[i]])
@@ -1347,12 +1347,12 @@ filterIsoDiffReport <- function(isoDiffReport, alpha,
             outtakes = c(outtakes, i)
             next
         }
-        if (whichPeak == 1 && isoDiffReport$p_value[i][[1]] > 
+        if (whichPeak == 1 & isoDiffReport$p_value[i][[1]] > 
             alpha) {
             outtakes = c(outtakes, i)
             next
         }
-        if (whichPeak == 2 && !any(unlist(isoDiffReport$p_value[i]) < 
+        if (whichPeak == 2 & !any(unlist(isoDiffReport$p_value[i]) < 
             alpha)) {
             outtakes = c(outtakes, i)
             next
