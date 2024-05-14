@@ -255,7 +255,9 @@ getIsoLabelReport <- function(xcmsSet, sampleNames,
         numisotopologues = 0
         k = j
         while (k <= numPutativeLabels){
-            while(labelsMatrix[k, 1] == a){
+            if(labelsMatrix[k, 1] != a){
+            break
+        }
             isotopologues = c(isotopologues, groupMzs[labelsMatrix[k, 
                 2]])
             IDs = c(IDs, groupIDs[labelsMatrix[k, 
@@ -265,7 +267,6 @@ getIsoLabelReport <- function(xcmsSet, sampleNames,
             numisotopologues = numisotopologues + 
                 1
             k = k + 1
-        }
         }
         isotopologues = unlist(isotopologues)
         IDs = unlist(IDs)
