@@ -71,7 +71,7 @@ getPeakIntensities <- function(xcmsSet, sampleNames,
 #' to not enforce monotonicity (monotonicityTol = FALSE) due to potential
 #' carryover between samples
 #' @param enrichTol tolerance parameter for enforcing enrichment of higher
-#' isotopologues in labeled samples; a value of 0 enforces strict requirement
+#' isotopologues in labeled samples; a value of 0 enforcesct requirement
 #' for enrichment of higher isotopologues to be higher in labeled samples
 #' @return %% ~Describe the value returned %% If it is a LIST, use %%
 #' \item{comp1}{Description of 'comp1'} %% \item{comp2}{Description of 'comp2'}
@@ -790,11 +790,10 @@ printIsoListOutputs <- function(listReport, outputfile) {
         ncols = 0
         for (j in 1:nblocks) {
             cell = listReport[[j]][[i]]
-            if (length(cell) > maxRows & class(cell) == 
-                "numeric") {
+            if (length(cell) > maxRows && all(is.numeric(cell))) {
                 maxRows = length(cell)
                 ncols = ncols + 1
-            } else if (class(cell) == "matrix") {
+            } else if (all(is.matrix(cell))) {
                 ncols = ncols + dim(cell)[2]
             } else {
                 ncols = ncols + 1
@@ -806,19 +805,18 @@ printIsoListOutputs <- function(listReport, outputfile) {
             ncol = 1
             for (k in 1:nblocks) {
                 cell = listReport[[k]][[i]]
-                if (length(cell) == 1 & j == 1 & 
-                  cell != -1) {
+                if (length(cell) == 1 && j == 1 && 
+                  all(cell != -1)) {
                   rowMatrix[j, ncol] = cell
                   ncol = ncol + 1
-                } else if (class(cell) == "numeric" || 
-                  class(cell) == "integer" || class(cell) == 
-                  "character") {
-                  if (!is.na(cell[j]) & cell[j] != 
-                    -1) {
+                } else if (all(is.numeric(cell)) || 
+                  all(is.integer(cell)) || all(is.character(cell))) {
+                  if (!all(is.na(cell[j])) && all(cell[j] != 
+                    -1)) {
                     rowMatrix[j, ncol] = cell[j]
                   }
                   ncol = ncol + 1
-                } else if (class(cell) == "matrix") {
+                } else if (all(is.matrix(cell))) {
                   rowMatrix[j, ncol:(ncol + dim(cell)[2] - 
                     1)] = cell[j, ]
                   ncol = ncol + dim(cell)[2]
@@ -1349,8 +1347,8 @@ filterIsoDiffReport <- function(isoDiffReport, alpha,
             outtakes = c(outtakes, i)
             next
         }
-        if (whichPeak == 1 & isoDiffReport$p_value[i][[1]] > 
-            alpha) {
+        if (whichPeak == 1 & all(isoDiffReport$p_value[i] > 
+            alpha)) {
             outtakes = c(outtakes, i)
             next
         }
