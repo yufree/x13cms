@@ -1347,7 +1347,7 @@ filterIsoDiffReport <- function(isoDiffReport, alpha,
             outtakes = c(outtakes, i)
             next
         }
-        if (whichPeak == 1 & all(isoDiffReport$p_value[i] > 
+        if (whichPeak == 1 & all(isoDiffReport$p_value[i][[1]] > 
             alpha)) {
             outtakes = c(outtakes, i)
             next
